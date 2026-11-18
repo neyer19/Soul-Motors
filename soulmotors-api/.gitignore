@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# IGNORAR CREDENCIALES Y VARIABLES DE ENTORNO
+.env
+src/main/resources/application.properties
+src/config/db.properties
+database/.env
