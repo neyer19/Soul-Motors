@@ -1,0 +1,250 @@
+/* ==========================================================================
+   SOUL MOTORS v1.0 — SISTEMA DUAL DE TEMAS Y TOKENS VISUALES (CAM-12)
+   ========================================================================== */
+
+:root,
+.dark {
+  /* Fondos y Superficies */
+  --bg-canvas: #1E1F22;
+  --bg-card: #2B2D30;
+  --bg-sidebar: #18191B;
+  --bg-input: #232428;
+  --bg-table-zebra: #26282B;
+  --bg-hover: #323539;
+
+  /* Identidad y Acentos */
+  --accent-primary: #E67E22;
+  --accent-primary-hover: #D35400;
+  --accent-secondary: #3498DB;
+
+  /* Tipografía */
+  --text-primary: #F2F2F2;
+  --text-secondary: #9DA5B4;
+  --text-inverse: #FFFFFF;
+
+  /* Bordes y Divisores */
+  --border-color: #3C3F41;
+  --border-sidebar: #3C3F41;
+  --shadow-modal: 0 12px 32px rgba(0, 0, 0, 0.55);
+
+  /* Badges Semánticos de los 6 Estados de Orden de Trabajo (SRS 9.2) */
+  --badge-diag-bg: #1A237E;
+  --badge-diag-text: #8C9EFF;
+
+  --badge-pend-bg: #FFF9C4;
+  --badge-pend-text: #F57F17;
+
+  --badge-proc-bg: #E0F7FA;
+  --badge-proc-text: #0097A7;
+
+  --badge-fin-bg: #E8F5E9;
+  --badge-fin-text: #2E7D32;
+
+  --badge-ent-bg: #1E8449;
+  --badge-ent-text: #FFFFFF;
+
+  --badge-canc-bg: #FFEBEE;
+  --badge-canc-text: #C62828;
+
+  /* Estados Semafóricos (Stock y Carga de Mecánicos) */
+  --status-ok: #2E7D32;
+  --status-warn: #F57F17;
+  --status-danger: #C62828;
+}
+
+.light {
+  /* Fondos y Superficies */
+  --bg-canvas: #F4F6F8;
+  --bg-card: #FFFFFF;
+  --bg-sidebar: #FFFFFF;
+  --bg-input: #FFFFFF;
+  --bg-table-zebra: #F8FAFC;
+  --bg-hover: #F1F5F9;
+
+  /* Identidad y Acentos */
+  --accent-primary: #E67E22;
+  --accent-primary-hover: #D35400;
+  --accent-secondary: #2980B9;
+
+  /* Tipografía */
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --text-inverse: #FFFFFF;
+
+  /* Bordes y Divisores */
+  --border-color: #E2E8F0;
+  --border-sidebar: #E2E8F0;
+  --shadow-modal: 0 12px 28px rgba(15, 23, 42, 0.14);
+
+  /* Badges Semánticos de los 6 Estados de Orden de Trabajo (SRS 9.2) */
+  --badge-diag-bg: #E8EAF6;
+  --badge-diag-text: #3949AB;
+
+  --badge-pend-bg: #FEF9E7;
+  --badge-pend-text: #B7950B;
+
+  --badge-proc-bg: #E1F5FE;
+  --badge-proc-text: #0277BD;
+
+  --badge-fin-bg: #E8F8F5;
+  --badge-fin-text: #1E8449;
+
+  --badge-ent-bg: #1E8449;
+  --badge-ent-text: #FFFFFF;
+
+  --badge-canc-bg: #FDEDEC;
+  --badge-canc-text: #C0392B;
+
+  /* Estados Semafóricos */
+  --status-ok: #1E8449;
+  --status-warn: #B7950B;
+  --status-danger: #C0392B;
+}
+
+/* ==========================================================================
+   ESTILOS GLOBALES BASE (GUÍA DE INTERFAZ SOUL MOTORS v1.0)
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.45;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Tarjetas limpias (radio 8px, borde 1px sin sombras densas) */
+.sm-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* Inputs y Desplegables compactos (36px altura, foco #E67E22) */
+.sm-input,
+.sm-select {
+  height: 36px;
+  padding: 0 12px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.sm-input:focus,
+.sm-select:focus {
+  border-color: var(--accent-primary);
+}
+
+/* Botones */
+.sm-btn-primary {
+  height: 36px;
+  padding: 0 16px;
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.sm-btn-primary:hover {
+  background-color: var(--accent-primary-hover);
+}
+
+.sm-btn-secondary {
+  height: 36px;
+  padding: 0 14px;
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sm-btn-secondary:hover {
+  background-color: var(--bg-hover);
+}
+
+/* Tablas compactas (filas 34-36px, zebra striping) */
+.sm-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.sm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.sm-table th {
+  text-align: left;
+  padding: 8px 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sm-table td {
+  height: 36px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sm-table tbody tr:nth-child(even) {
+  background-color: var(--bg-table-zebra);
+}
+
+.sm-table tbody tr:hover {
+  background-color: var(--bg-hover);
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+/* Chips de Estado de Orden */
+.badge-estado {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.badge-DIAGNOSTICO { background: var(--badge-diag-bg); color: var(--badge-diag-text); }
+.badge-PENDIENTE   { background: var(--badge-pend-bg); color: var(--badge-pend-text); }
+.badge-EN_PROCESO  { background: var(--badge-proc-bg); color: var(--badge-proc-text); }
+.badge-FINALIZADA  { background: var(--badge-fin-bg);  color: var(--badge-fin-text); }
+.badge-ENTREGADA   { background: var(--badge-ent-bg);  color: var(--badge-ent-text); }
+.badge-CANCELADA   { background: var(--badge-canc-bg); color: var(--badge-canc-text); }
