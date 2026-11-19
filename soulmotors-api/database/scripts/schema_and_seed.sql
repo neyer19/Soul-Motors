@@ -88,6 +88,54 @@ CREATE TABLE movimiento_inventario (
 );
 CREATE TRIGGER trg_mov_inv_actualizado_at BEFORE UPDATE ON movimiento_inventario FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
 
+-- ==========================================
+-- TAREA S1-T01B: PROVEEDORES Y PIEZA_PROVEEDOR
+-- Entorno: Neon (PostgreSQL Cloud)
+-- ==========================================
+
+-- 1. Tabla de Proveedores
+CREATE TABLE proveedor (
+    id BIGSERIAL PRIMARY KEY,
+    nit VARCHAR(20) UNIQUE NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20),
+    email VARCHAR(100),
+    direccion VARCHAR(150),
+    tiempo_entrega_dias INT NOT NULL CHECK (tiempo_entrega_dias >= 0),
+    activo BOOLEAN DEFAULT TRUE,
+    creado_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    actualizado_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER trg_proveedor_actualizado_at 
+BEFORE UPDATE ON proveedor 
+FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
+
+-- 2. Tabla Intermedia Pieza_Proveedor (Relación N:M con Prioridad y Costo)
+CREATE TABLE pieza_proveedor (
+    id BIGSERIAL PRIMARY KEY,
+    id_pieza BIGINT NOT NULL,
+    id_proveedor BIGINT NOT NULL,
+    prioridad INT NOT NULL CHECK (prioridad >= 1),
+    costo_pactado DECIMAL(10,2) NOT NULL CHECK (costo_pactado >= 0),
+    creado_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    actualizado_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Restricciones de Integridad
+    CONSTRAINT fk_pp_pieza FOREIGN KEY (id_pieza) REFERENCES pieza(id) ON DELETE CASCADE,
+    CONSTRAINT fk_pp_proveedor FOREIGN KEY (id_proveedor) REFERENCES proveedor(id) ON DELETE RESTRICT,
+    -- Evita asignar el mismo proveedor dos veces a la misma pieza
+    CONSTRAINT uq_pieza_proveedor UNIQUE (id_pieza, id_proveedor),
+    -- Evita dos proveedores con el mismo nivel de prioridad para una misma pieza
+    CONSTRAINT uq_pieza_prioridad UNIQUE (id_pieza, prioridad)
+);
+
+CREATE TRIGGER trg_pieza_proveedor_actualizado_at 
+BEFORE UPDATE ON pieza_proveedor 
+FOR EACH ROW EXECUTE FUNCTION actualizar_timestamp();
+
+
+
 
 -- ==========================================
 -- DATOS SEMILLA (SEED DATA)
@@ -107,3 +155,17 @@ INSERT INTO vehiculo (cliente_id, placa, marca, modelo) VALUES
 INSERT INTO pieza (sku, nombre, categoria, precio_venta, stock_actual, stock_minimo) VALUES
 ('REP-001', 'Pastillas de Freno', 'Repuesto', 45000.00, 10, 2),
 ('ACC-001', 'Casco Integral', 'Accesorio', 120000.00, 5, 1);
+
+-- ==========================================
+-- DATOS SEMILLA (SEED DATA) - S1-T01B
+-- ==========================================
+
+INSERT INTO proveedor (nit, nombre, telefono, email, direccion, tiempo_entrega_dias) VALUES
+('900123456-1', 'Distribuidora Motopartes S.A.S.', '3105550199', 'ventas@motopartes.com', 'Calle 13 # 24-50, Bogotá', 2),
+('800987654-2', 'Importadora Yamaha & Racing', '3204448877', 'pedidos@yamaharacing.co', 'Av. Boyacá # 68-12, Bogotá', 5);
+
+-- Asociamos las piezas existentes (id 1 = Pastillas de Freno, id 2 = Casco Integral)
+INSERT INTO pieza_proveedor (id_pieza, id_proveedor, prioridad, costo_pactado) VALUES
+(1, 1, 1, 28000.00), -- Proveedor principal (Prioridad 1) para Pastillas de Freno
+(1, 2, 2, 31000.00), -- Proveedor secundario (Prioridad 2) para Pastillas de Freno
+(2, 2, 1, 85000.00); -- Proveedor principal (Prioridad 1) para Casco Integral
